@@ -146,6 +146,16 @@
   <h3 class="step-group-title">1. 检验单基础配置与自动指派</h3>
   <div class="sub-step-header">1.1 检验员等级设定</div>
   <div class="step-pair">
+    <div class="step-pair-imgs">
+      <figure class="step-figure">
+        <img src="../images/quality/1.1-1.png" alt="检验单指派等级设定">
+        <figcaption>检验单指派等级设定</figcaption>
+      </figure>
+      <figure class="step-figure">
+        <img src="../images/quality/1.1-2.png" alt="等级设定编辑">
+        <figcaption>等级设定编辑</figcaption>
+      </figure>
+    </div>
     <div class="step-pair-text">
       <div class="step-desc"><strong>作业说明：</strong>质量管理员在 Web 端【检验单指派等级设定】功能中，为不同类型的检验单配置所需的最低检验员等级。设定内容包括：检验单类型（PQC 过程检验、IQC 来料检验、FQC 成品检验等）和检验类型（首检、巡检、末检等），以及对应需要什么等级的检验员才能处理。等级规则如 P4-2 &gt; P4-1 &gt; P3-3，等级越高的检验员可以处理越重要的检验单。</div>
       <div class="step-remark"><strong>备注：</strong>检验员等级由质量部在后台统一维护。只有达到设定等级的检验员才会被系统指派处理该类型的检验单。</div>
@@ -153,6 +163,16 @@
   </div>
   <div class="sub-step-header">1.2 岗位绑定检验群组</div>
   <div class="step-pair">
+    <div class="step-pair-imgs">
+      <figure class="step-figure">
+        <img src="../images/quality/1.2-1.png" alt="岗位绑定检验群组">
+        <figcaption>岗位绑定检验群组</figcaption>
+      </figure>
+      <figure class="step-figure">
+        <img src="../images/quality/1.2-2.png" alt="群组选择">
+        <figcaption>群组选择</figcaption>
+      </figure>
+    </div>
     <div class="step-pair-text">
       <div class="step-desc"><strong>作业说明：</strong>在【岗位绑定检验群组】功能中，将不同的生产岗位（如注塑车间、组装车间等）与对应的检验群组进行绑定。配置后，当某个岗位产生检验单时，系统自动知道该检验单应该由哪个检验群组来负责处理。这样生产A线的检验单不会分到生产B线的检验员手中。</div>
       <div class="step-remark"><strong>备注：</strong>一个岗位可以绑定多个检验群组，一个检验群组也可以服务于多个岗位，按实际管理需要灵活配置。</div>
@@ -160,6 +180,16 @@
   </div>
   <div class="sub-step-header">1.3 设备位置绑定检验群组</div>
   <div class="step-pair">
+    <div class="step-pair-imgs">
+      <figure class="step-figure">
+        <img src="../images/quality/1.3-1.png" alt="设备位置群组绑定">
+        <figcaption>设备位置群组绑定</figcaption>
+      </figure>
+      <figure class="step-figure">
+        <img src="../images/quality/1.3-2.png" alt="位置绑定检验群组">
+        <figcaption>位置绑定检验群组</figcaption>
+      </figure>
+    </div>
     <div class="step-pair-text">
       <div class="step-desc"><strong>作业说明：</strong>在【设备位置绑定检验群组】功能中，将设备所在位置与检验群组进行关联。先建立设备位置（如注塑区、组装区等），再将位置绑定到对应的检验群组和检验员。当某设备上的产品需要检验时，系统根据设备所在位置找到对应的检验群组，从而将检验单指派给正确的人员。</div>
       <div class="step-remark"><strong>备注：</strong>设备位置群组与岗位群组为双重校验机制，系统会综合两者来筛选最合适的检验员。</div>
@@ -167,6 +197,12 @@
   </div>
   <div class="sub-step-header">1.4 检验单自动指派流程</div>
   <div class="step-pair">
+    <div class="step-pair-imgs">
+      <figure class="step-figure">
+        <img src="../images/quality/1.4.png" alt="检验单自动指派流程">
+        <figcaption>检验单自动指派流程</figcaption>
+      </figure>
+    </div>
     <div class="step-pair-text">
       <div class="step-desc"><strong>作业说明：</strong>以上三项基础数据配置完成后，系统即可实现检验单自动指派。当检验单生成时（手动新建或接口自动生成），系统按以下流程自动分配：① 读取检验单的类型和检验类型，查找该类型需要的最低检验员等级；② 根据工单的岗位和设备位置，找到绑定的检验群组，筛选出该群组内的检验员；③ 排除已有任务或不在岗（休息/下班）的检验员；④ 对符合条件的检验员按等级从高到低排序，指派给等级最高的空闲检验员；⑤ 检验单状态变更为「待检验」，该检验员收到任务通知。</div>
       <div class="step-remark"><strong>备注：</strong>若检验员完成检验后，系统自动解除该检验单的指派锁定，可继续接收新的检验单。检验单也支持手动重新指派（有权限的上级可调整）。</div>
@@ -176,10 +212,6 @@
   <div class="sub-step-header">2.1 进入检验清单</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
-      <figure class="step-figure">
-        <img src="../images/quality/fig-01.png" alt="质量检验模块">
-        <figcaption>质量检验模块</figcaption>
-      </figure>
       <figure class="step-figure">
         <img src="../images/quality/fig-02.png" alt="检验清单界面">
         <figcaption>检验清单界面</figcaption>
@@ -276,10 +308,6 @@
   <div class="sub-step-header">3.1 查看异常单</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
-      <figure class="step-figure">
-        <img src="../images/quality/fig-13.png" alt="质量异常模块">
-        <figcaption>质量异常模块</figcaption>
-      </figure>
       <figure class="step-figure">
         <img src="../images/quality/fig-14.png" alt="异常单列表">
         <figcaption>异常单列表</figcaption>

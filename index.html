@@ -10,24 +10,44 @@
   <div class="index-layout">
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <h2 class="sidebar-title">美诗儿 MES 操作指导书</h2>
+        <h2 class="sidebar-title">美诗儿 操作指导书</h2>
       </div>
       <nav class="sidebar-modules">
-        <ul>
-                <li><a href="pages/injection.html">🏭 注塑车间操作手册</a></li>
+        <div class="nav-group">
+          <div class="nav-group-title" onclick="toggleNav('mes')">
+            <span class="nav-arrow open" id="arrow-mes">&#9654;</span>
+            <span>MES</span>
+          </div>
+          <div class="nav-group-body open" id="nav-mes">
+            <ul>
+                    <li><a href="pages/injection.html">🏭 注塑车间操作手册</a></li>
       <li><a href="pages/assembly.html">🏭 组装车间操作手册</a></li>
       <li><a href="pages/equipment.html">⚙️ 设备维保操作手册</a></li>
       <li><a href="pages/mold.html">🔧 模具维保操作手册</a></li>
       <li><a href="pages/quality.html">📋 质量检验操作手册</a></li>
 
-        </ul>
+            </ul>
+          </div>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-title" onclick="toggleNav('aps')">
+            <span class="nav-arrow" id="arrow-aps">&#9654;</span>
+            <span>APS</span>
+          </div>
+          <div class="nav-group-body" id="nav-aps">
+            <ul>
+              <li><a href="pages/aps-monthly.html">📊 月度产能规划版本</a></li>
+              <li><a href="pages/aps-workshop.html">📊 车间排产规划版本</a></li>
+            </ul>
+          </div>
+        </div>
       </nav>
     </aside>
     <main class="main-content">
       <header class="page-header index-header">
         <h1>美诗儿（浙江）环境智能电器有限公司</h1>
-        <p class="subtitle">MES 系统操作指导书</p>
-        <p class="desc">本手册包含以下操作模块，点击模块卡片或侧边栏目录查看详细内容。</p>
+        <p class="subtitle">MES &amp; APS 系统操作指导书</p>
+        <p class="desc">本手册包含MES操作模块和APS操作模块，点击模块卡片或侧边栏目录查看详细内容。</p>
       </header>
       <div class="module-grid">
             <a href="pages/injection.html" class="module-card">

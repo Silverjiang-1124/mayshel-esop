@@ -98,6 +98,17 @@ function initSmoothScroll() {
 }
 
 /**
+ * 切换导航组展开/折叠
+ */
+function toggleNav(name) {
+  var body = document.getElementById('nav-' + name);
+  var arrow = document.getElementById('arrow-' + name);
+  if (!body || !arrow) return;
+  body.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+
+/**
  * 图片点击放大（lightbox）
  */
 function initImageZoom() {

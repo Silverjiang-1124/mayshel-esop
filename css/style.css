@@ -90,6 +90,46 @@ code {
     padding: 8px 0;
     flex-shrink: 0;
 }
+
+/* Expandable nav groups (MES / APS) */
+.sidebar-modules .nav-group {
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.sidebar-modules .nav-group-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--sidebar-text);
+    transition: all var(--transition);
+    user-select: none;
+    border-left: 3px solid transparent;
+}
+.sidebar-modules .nav-group-title:hover {
+    background: var(--sidebar-hover);
+    color: var(--sidebar-active);
+}
+.sidebar-modules .nav-arrow {
+    font-size: 0.7rem;
+    transition: transform 0.25s ease;
+    color: rgba(255,255,255,0.3);
+    flex-shrink: 0;
+}
+.sidebar-modules .nav-arrow.open {
+    transform: rotate(90deg);
+}
+.sidebar-modules .nav-group-body {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s ease;
+}
+.sidebar-modules .nav-group-body.open {
+    max-height: 400px;
+}
+
 .sidebar-modules ul { list-style: none; }
 .sidebar-modules li { margin: 0; }
 .sidebar-modules a {

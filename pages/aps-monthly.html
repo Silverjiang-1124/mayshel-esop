@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>月度产能规划 - APS操作手册</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="../index.html" class="sidebar-home-link">
+          <h2 class="sidebar-title">美诗儿 APS 操作手册</h2>
+        </a>
+      </div>
+      <nav class="sidebar-modules">
+        <div class="nav-group">
+          <div class="nav-group-title" onclick="toggleNav('mes')">
+            <span class="nav-arrow" id="arrow-mes">&#9654;</span>
+            <span>MES</span>
+          </div>
+          <div class="nav-group-body" id="nav-mes">
+            <ul>
+              <li><a href="../pages/injection.html">🏭 注塑车间操作手册</a></li>
+              <li><a href="../pages/assembly.html">🏭 组装车间操作手册</a></li>
+              <li><a href="../pages/equipment.html">⚙️ 设备维保操作手册</a></li>
+              <li><a href="../pages/mold.html">🔧 模具维保操作手册</a></li>
+              <li><a href="../pages/quality.html">📋 质量检验操作手册</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-title" onclick="toggleNav('aps')">
+            <span class="nav-arrow open" id="arrow-aps">&#9654;</span>
+            <span>APS</span>
+          </div>
+          <div class="nav-group-body open" id="nav-aps">
+            <ul>
+              <li><a href="../pages/aps-monthly.html" class="active">📊 月度产能规划版本</a></li>
+              <li><a href="../pages/aps-workshop.html">📊 车间排产规划版本</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </aside>
+    <main class="main-content" id="main-content">
+      <header class="page-header">
+        <h1>APS 月度产能规划版本</h1>
+        <div class="meta-info">Advanced Planning &amp; Scheduling - 月度产能评估</div>
+      </header>
+      <div class="sections">
+
+        <!-- 场景说明 -->
+        <section class="doc-section" id="scenario">
+          <h2 class="section-title">场景说明</h2>
+          <div class="section-content scenario-content">
+            <p>月度产能规划是从产能评估到工单下发的全流程闭环管理。计划部门依据订单需求，结合现有物料供给、设备资源、模具资源等约束条件进行产能规划与平衡，确保月度生产计划的可执行性。</p>
+            <p><strong>重点说明：</strong></p>
+            <p>1）判断目前产能是否满足订单的需求。</p>
+            <p>2）将APS规划后的结果（建议新开工单、建议新开采购单）回抛至E10，在E10中下发成已审核的工单、采购订单。</p>
+          </div>
+        </section>
+
+        <!-- 流程图 -->
+        <section class="doc-section" id="flowchart">
+          <h2 class="section-title">流程图</h2>
+          <div class="flowchart-content">
+            <figure class="flowchart-figure">
+              <img src="../images/aps/monthly_image9.png" alt="月度产能规划流程图" style="max-width:100%;max-height:600px;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:zoom-in">
+              <figcaption>月度产能规划流程图</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <!-- 操作步骤说明 -->
+        <section class="doc-section" id="steps">
+          <h2 class="section-title">操作步骤说明</h2>
+
+          <!-- 节点1 -->
+          <h3 class="step-group-title">1. 开启APS</h3>
+          <div class="step-pair">
+            <div class="step-pair-imgs">
+              <figure class="step-figure"><img src="../images/aps/monthly_image10.png" alt="开启APS-方式一"><figcaption>方式一：从E10启动APS</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image11.png" alt="开启APS-方式二"><figcaption>方式二：直接打开APS客户端</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image12.png" alt="开启APS-登录确认"><figcaption>登录后检查厂别/数据库/时间</figcaption></figure>
+            </div>
+            <div class="step-pair-text">
+              <div class="step-label">界面说明：</div>
+              <div class="step-desc">
+                <p><strong>方式一：</strong>在E10的APS排程规划作业，选定此次要运行的规划版本MSE-MCP，点击APS Client，系统自动跳转开启APS。</p>
+                <p><strong>方式二：</strong>双击打开APS，输入账号密码，在搜索框中选择此次要运行的版本MSE-MCP，点击登录后进入APS。</p>
+                <p>打开APS后检查厂别、APS数据库、时间是否正确，避免进错版本。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 节点2 -->
+          <h3 class="step-group-title">2. 新增APS规划版本</h3>
+          <div class="step-pair">
+            <div class="step-pair-imgs">
+              <figure class="step-figure"><img src="../images/aps/monthly_image13.png" alt="新增版本-入口"><figcaption>计划 >> 新增APS规划版本</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image17.png" alt="新增版本-执行"><figcaption>输入版本号，执行物料产能规划</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image16.png" alt="新增版本-锁定"><figcaption>选择锁定方式</figcaption></figure>
+            </div>
+            <div class="step-pair-text">
+              <div class="step-label">界面打开方式：</div>
+              <div class="step-desc">
+                <p>计划 >> 新增APS规划版本</p>
+                <p>1. 新增APS规划版本会让APS重新从E10和MES获取最新的数据，再进行排程运算。只有当APS需要抓取E10或MES的最新数据时才去新增APS规划版本，其他情况只需要进行重排即可。</p>
+                <p>2. 排程和重排都需要选择"不锁定"的选项（后续模拟时可按需调整）。</p>
+                <div class="step-remark">⚠️ 当"新增"按钮和"物料产能规划"按钮无法使用时，说明需要先做版本放弃或版本确认。</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 节点3 -->
+          <h3 class="step-group-title">3. 检视订单是否达交</h3>
+          <div class="step-pair">
+            <div class="step-pair-imgs">
+              <figure class="step-figure"><img src="../images/aps/monthly_image18.png" alt="订单交期总表"><figcaption>订单交期总表 RPT007</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image19.png" alt="订单达交检视"><figcaption>检视订单达交情况</figcaption></figure>
+            </div>
+            <div class="step-pair-text">
+              <div class="step-label">界面打开方式：</div>
+              <div class="step-desc">
+                <p>报表 >> 销售相关 >> 订单交期总表(RPT007)</p>
+                <p>1. APS排程完成后，会依照订单需求结合现有物料供给（ERP已开工单、请采购单、库存等）和设备、模具等资源计算本月产能是否能满足订单需求。</p>
+                <p>2. 若产能不足订单未达交，计划部门需协调业务部门调整未完工订单需求日期或需求数量，放弃此版本的结果。</p>
+                <p>3. 线下协调后，再次回到新增APS规划版本的流程。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 节点4 -->
+          <h3 class="step-group-title">4. 检视资源的负荷情况 — 设备</h3>
+          <div class="step-pair">
+            <div class="step-pair-imgs">
+              <figure class="step-figure"><img src="../images/aps/monthly_image20.png" alt="机台负荷总览表"><figcaption>机台负荷总览表 ARP001</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image21.png" alt="设备负荷检视"><figcaption>检视设备资源的负荷情况</figcaption></figure>
+            </div>
+            <div class="step-pair-text">
+              <div class="step-label">界面打开方式：</div>
+              <div class="step-desc">
+                <p>报表 >> 制造相关 >> 机台负荷总览表（ARP001）</p>
+                <p>1. 计划通过查看机台负荷表，了解依照生产需求的预计产能负荷状况，依此判断如何安排未来一个月的设备资源或是再与业务部门沟通调整生产需求。</p>
+                <p>2. 设备产能由行事历设置的时间转换而来，若要调整产能则需调整行事历。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 节点5 -->
+          <h3 class="step-group-title">5. 检视资源的使用情况 — 模具</h3>
+          <div class="step-pair">
+            <div class="step-pair-imgs">
+              <figure class="step-figure"><img src="../images/aps/monthly_image22.png" alt="模具使用计划"><figcaption>模具使用计划 RPT123</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image23.png" alt="模具使用检视"><figcaption>检视模具资源的使用情况</figcaption></figure>
+            </div>
+            <div class="step-pair-text">
+              <div class="step-label">界面打开方式：</div>
+              <div class="step-desc">
+                <p>报表 >> 制造相关 >> 模具使用计划（RPT123）</p>
+                <p>1. 通过查看模具使用计划，了解各制程预计使用模具情况，依此安排未来一个月的模具使用计划及模具维修保养计划。</p>
+                <p>2. 同时根据模具的负荷决定是否与业务部门沟通调整生产需求量。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 节点6 -->
+          <h3 class="step-group-title">6. 调整资源安排 — 工作模式</h3>
+          <div class="step-pair">
+            <div class="step-pair-imgs">
+              <figure class="step-figure"><img src="../images/aps/monthly_image24.png" alt="工作模式维护"><figcaption>工作模式维护 DAT056A</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image25.png" alt="工作模式设定"><figcaption>定义一天内时段的工作状态</figcaption></figure>
+            </div>
+            <div class="step-pair-text">
+              <div class="step-label">界面打开方式：</div>
+              <div class="step-desc">
+                <p>资料维护 >> 行事历 >> 工作模式维护(DAT056A)</p>
+                <p>执行步骤：工作模式 >> 周行事历 >> 日行事历 >> 机台行事历</p>
+                <p>1. 工作模式：定义一天内具体时段的工作状态，如 08:00~16:00 是工作时段，其余是非工作时段。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 节点7 -->
+          <h3 class="step-group-title">7. 调整资源安排 — 周行事历</h3>
+          <div class="step-pair">
+            <div class="step-pair-imgs">
+              <figure class="step-figure"><img src="../images/aps/monthly_image24.png" alt="周行事历维护"><figcaption>周行事历维护 DAT054</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image26.png" alt="周行事历设定"><figcaption>定义每周工作模式</figcaption></figure>
+            </div>
+            <div class="step-pair-text">
+              <div class="step-label">界面打开方式：</div>
+              <div class="step-desc">
+                <p>资料维护 >> 行事历 >> 周行事历维护(DAT054)</p>
+                <p>执行步骤：工作模式 >> 周行事历 >> 日行事历 >> 机台行事历</p>
+                <p>1. 定义一周七天（周一至周日）每天的工作模式，例如：周一至周六用"工作模式ZP1"，周日休息。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 节点8 -->
+          <h3 class="step-group-title">8. 调整资源安排 — 日行事历</h3>
+          <div class="step-pair">
+            <div class="step-pair-imgs">
+              <figure class="step-figure"><img src="../images/aps/monthly_image24.png" alt="日行事历维护"><figcaption>日行事历维护 DAT029</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image27.png" alt="日行事历设定"><figcaption>定义特殊日期覆盖</figcaption></figure>
+            </div>
+            <div class="step-pair-text">
+              <div class="step-label">界面打开方式：</div>
+              <div class="step-desc">
+                <p>资料维护 >> 行事历 >> 日行事历维护(DAT029)</p>
+                <p><strong>执行步骤：</strong>工作模式 >> 周行事历 >> 日行事历 >> 机台行事历</p>
+                <p>定义特殊日期（如国定假日、加班日），可以覆盖周行事历的设定。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 节点9 -->
+          <h3 class="step-group-title">9. 调整资源安排 — 机台行事历</h3>
+          <div class="step-pair">
+            <div class="step-pair-imgs">
+              <figure class="step-figure"><img src="../images/aps/monthly_image28.png" alt="机台维护"><figcaption>机台维护 DAT030</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image29.png" alt="机台行事历导入导出"><figcaption>支持导入导出批量调整</figcaption></figure>
+            </div>
+            <div class="step-pair-text">
+              <div class="step-label">界面打开方式：</div>
+              <div class="step-desc">
+                <p>资料维护 >> 资源 >> 机台维护（DAT030）</p>
+                <p><strong>执行步骤：</strong>工作模式 >> 周行事历 >> 日行事历 >> 机台行事历</p>
+                <p>1. 进入机台维护（DAT030），给每个机台维护对应的行事历（支持导入导出功能，可导出Excel后批量调整再导入）。</p>
+                <p>2. 实现对未来一个月设备资源的精细化安排，调整内容包括：设备可用时间、班次安排、停机维护计划等。</p>
+                <p>3. 调整后的行事历将直接影响APS运算结果，确保排产可行性。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 节点10 -->
+          <h3 class="step-group-title">10. 重排</h3>
+          <div class="step-pair">
+            <div class="step-pair-imgs">
+              <figure class="step-figure"><img src="../images/aps/monthly_image30.png" alt="重排-打开方式"><figcaption>界面打开方式：计划>>重排</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image31.png" alt="重排-选择模组"><figcaption>选择"排程模组"=物料产能规划，再点击执行</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image32.png" alt="重排-锁定方式"><figcaption>锁定方式=不锁定，再点击确定</figcaption></figure>
+            </div>
+            <div class="step-pair-text">
+              <div class="step-label">界面说明：</div>
+              <div class="step-desc">
+                <p>1. 基于前面做的模具/设备的产能调整，系统重新进行运算。</p>
+                <p>2. 排程模组：<br>
+                — <strong>物料规划：</strong>不考虑产能，算物料供需<br>
+                — <strong>产能规划：</strong>基于产能的调整，进行整体产能运算，不再重算物料<br>
+                — <strong>物料产能规划：</strong>重算物料的供需和现有产能的负荷</p>
+                <p>3. 若需再调整资源：资源负荷 > 调整资源 > 重新运算验证。</p>
+                <p>4. 若需再调整需求：放弃此版本规划 > 调整需求 > 新增APS版本 > 结果验证。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 节点11 -->
+          <h3 class="step-group-title">11. 检视生产计划</h3>
+          <div class="step-pair">
+            <div class="step-pair-imgs">
+              <figure class="step-figure"><img src="../images/aps/monthly_image33.png" alt="新开工单"><figcaption>新开工单 RPT010</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image34.png" alt="新开工单明细"><figcaption>基于需求运算出工单数量缺口</figcaption></figure>
+            </div>
+            <div class="step-pair-text">
+              <div class="step-label">界面打开方式：</div>
+              <div class="step-desc">
+                <p>报表 >> 制造相关 >> 新开工单（RPT010）</p>
+                <p>1. 透过系统自动运算，得知预计需下多少工单量以满足需求。</p>
+                <p>2. 重点确认工单数量、日期的合理性。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 节点12 -->
+          <h3 class="step-group-title">12. 检视采购计划</h3>
+          <div class="step-pair">
+            <div class="step-pair-imgs">
+              <figure class="step-figure"><img src="../images/aps/monthly_image35.png" alt="新开采购令"><figcaption>新开采购令 RPT011</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image36.png" alt="采购计划明细"><figcaption>基于需求运算出请采购数量缺口</figcaption></figure>
+            </div>
+            <div class="step-pair-text">
+              <div class="step-label">界面打开方式：</div>
+              <div class="step-desc">
+                <p>报表 >> 制造相关 >> 新开采购令（RPT011）</p>
+                <p>1. 透过系统自动运算，得知预计需下多少采购量以满足需求。</p>
+                <p>2. 结合需求及采购参数（最小补量、补货倍量等），重点确认数量、日期的合理性。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 节点13 -->
+          <h3 class="step-group-title">13. 单据勾选回抛</h3>
+          <div class="step-pair">
+            <div class="step-pair-imgs">
+              <figure class="step-figure"><img src="../images/aps/monthly_image37.png" alt="批次勾选变更作业"><figcaption>批次勾选变更作业 CPT019</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image38.png" alt="回抛单据"><figcaption>勾选需回抛的单据</figcaption></figure>
+            </div>
+            <div class="step-pair-text">
+              <div class="step-label">界面打开方式：</div>
+              <div class="step-desc">
+                <p>计划 >> 批次勾选变更作业（CPT019）</p>
+                <p>1. 选择下发的单据：【编辑】选择性勾选需要回抛的新开工单或新开采购令。</p>
+                <p>2. 针对要下发的单据，勾选【核发/变更】，点击【储存】，保留勾选的单据。</p>
+                <div class="step-remark">注：不使用批次勾选变更作业则表示系统规划出的建议新开工单或请购单会全部回抛至E10系统。</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 节点14 -->
+          <h3 class="step-group-title">14. 版本确认/放弃</h3>
+          <div class="step-pair">
+            <div class="step-pair-imgs">
+              <figure class="step-figure"><img src="../images/aps/monthly_image39.png" alt="版本确认放弃"><figcaption>计划 >> 版本确认/放弃</figcaption></figure>
+            </div>
+            <div class="step-pair-text">
+              <div class="step-label">界面打开方式：</div>
+              <div class="step-desc">
+                <p>计划 >> 版本确认/放弃</p>
+                <p>1. 资料锁定之后才会出现版本确认/放弃的按钮。</p>
+                <p>2. 版本确认后，会将可下单的工单推送到E10，后面在E10中接续进行开单的操作。</p>
+                <p>3. 版本放弃是放弃此版的规划结果，下次可重新开启一个新版本。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 节点15 -->
+          <h3 class="step-group-title">15. 下发工单</h3>
+          <div class="step-pair">
+            <div class="step-pair-imgs">
+              <figure class="step-figure"><img src="../images/aps/monthly_image40.png" alt="下发生产计划"><figcaption>E10中发放生产计划</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image41.png" alt="维护工单"><figcaption>维护工单 - 检视并审核</figcaption></figure>
+            </div>
+            <div class="step-pair-text">
+              <div class="step-label">界面说明：</div>
+              <div class="step-desc">
+                <p>1. 进入E10系统。</p>
+                <p>2. 根据APS排程规划时所使用的规划策略，正确选择规划策略编号MSE-MCP。</p>
+                <p>3. 勾选单据后点击【发放生产计划】，将单据转到【维护工单】内。</p>
+                <p>4. 在维护工单中检视并审核已发放的工单。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 节点16 -->
+          <h3 class="step-group-title">16. 下发请购单</h3>
+          <div class="step-pair">
+            <div class="step-pair-imgs">
+              <figure class="step-figure"><img src="../images/aps/monthly_image42.png" alt="下发采购计划"><figcaption>E10中发放采购计划</figcaption></figure>
+              <figure class="step-figure"><img src="../images/aps/monthly_image43.png" alt="维护请购单"><figcaption>维护请购单/采购订单</figcaption></figure>
+            </div>
+            <div class="step-pair-text">
+              <div class="step-label">界面说明：</div>
+              <div class="step-desc">
+                <p>1. 进入E10系统。</p>
+                <p>2. 根据APS排程规划时所使用的规划策略，正确选择规划策略编号MSE-MCP。</p>
+                <p>3. 勾选单据后点击【发放生产计划】，将单据转到【维护请购单】内。</p>
+                <p>4. 由采购人员将请购单分配为采购订单。</p>
+              </div>
+            </div>
+          </div>
+
+        </section>
+      </div>
+      <footer class="page-footer">
+        <p>美诗儿（浙江）环境智能电器有限公司 - APS 操作手册</p>
+        <p class="footer-edit-hint">提示：将需要替换的图片放入对应 images/aps/ 子目录，保持文件名一致即可</p>
+      </footer>
+    </main>
+  </div>
+  <!-- Image zoom overlay -->
+  <div class="img-overlay" id="imgOverlay" onclick="closeZoom()">
+    <img id="zoomImg" alt="放大查看">
+  </div>
+  <script src="../js/main.js"></script>
+  <script>
+    function zoomImg(img) {
+      var overlay = document.getElementById('imgOverlay');
+      var zoomed = document.getElementById('zoomImg');
+      zoomed.src = img.src;
+      zoomed.alt = img.alt;
+      overlay.classList.add('show');
+    }
+    function closeZoom() {
+      document.getElementById('imgOverlay').classList.remove('show');
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeZoom();
+    });
+    document.querySelectorAll('.flowchart-figure img, .step-figure img').forEach(function(img) {
+      img.addEventListener('click', function(e) { zoomImg(this); });
+    });
+  </script>
+</body>
+</html>

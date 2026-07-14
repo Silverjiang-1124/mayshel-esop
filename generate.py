@@ -461,15 +461,45 @@ CONTENT = {
         "img_dir": "images/quality",
         "scenario": [
             "在生产流程中对半成品或关键工序进行动态监控。在 MES 中关键工序发起首检后生成 PQC 首件检查单据，进站后生成检验单据、出站后生成检验单据，供检验员进行检验及异常处理操作。",
+            "系统支持检验单的自动指派功能：当检验单生成时，系统根据检验类型、岗位群组、设备位置群组及检验员等级，自动将检验单分派给最合适的检验员。",
             "注：IQC 检验前端检验作业流程与 PQC 一致，但单据发起由 ERP 进行操作。",
-            "本手册说明 PQC 检验作业及质量异常处置两大模块的系统操作步骤。"
+            "本手册说明检验单基础配置与自动指派逻辑、PQC 检验作业及质量异常处置三大模块的系统操作步骤。"
         ],
         "steps": [
             {
-                "title": "1. PQC 检验作业",
+                "title": "1. 检验单基础配置与自动指派",
                 "sub_steps": [
                     {
-                        "id": "1.1", "name": "进入检验清单",
+                        "id": "1.1", "name": "检验员等级设定",
+                        "desc": "质量管理员在 Web 端【检验单指派等级设定】功能中，为不同类型的检验单配置所需的最低检验员等级。设定内容包括：检验单类型（PQC 过程检验、IQC 来料检验、FQC 成品检验等）和检验类型（首检、巡检、末检等），以及对应需要什么等级的检验员才能处理。等级规则如 P4-2 > P4-1 > P3-3，等级越高的检验员可以处理越重要的检验单。",
+                        "remark": "检验员等级由质量部在后台统一维护。只有达到设定等级的检验员才会被系统指派处理该类型的检验单。",
+                        "images": []
+                    },
+                    {
+                        "id": "1.2", "name": "岗位绑定检验群组",
+                        "desc": "在【岗位绑定检验群组】功能中，将不同的生产岗位（如注塑车间、组装车间等）与对应的检验群组进行绑定。配置后，当某个岗位产生检验单时，系统自动知道该检验单应该由哪个检验群组来负责处理。这样生产A线的检验单不会分到生产B线的检验员手中。",
+                        "remark": "一个岗位可以绑定多个检验群组，一个检验群组也可以服务于多个岗位，按实际管理需要灵活配置。",
+                        "images": []
+                    },
+                    {
+                        "id": "1.3", "name": "设备位置绑定检验群组",
+                        "desc": "在【设备位置绑定检验群组】功能中，将设备所在位置与检验群组进行关联。先建立设备位置（如注塑区、组装区等），再将位置绑定到对应的检验群组和检验员。当某设备上的产品需要检验时，系统根据设备所在位置找到对应的检验群组，从而将检验单指派给正确的人员。",
+                        "remark": "设备位置群组与岗位群组为双重校验机制，系统会综合两者来筛选最合适的检验员。",
+                        "images": []
+                    },
+                    {
+                        "id": "1.4", "name": "检验单自动指派流程",
+                        "desc": "以上三项基础数据配置完成后，系统即可实现检验单自动指派。当检验单生成时（手动新建或接口自动生成），系统按以下流程自动分配：① 读取检验单的类型和检验类型，查找该类型需要的最低检验员等级；② 根据工单的岗位和设备位置，找到绑定的检验群组，筛选出该群组内的检验员；③ 排除已有任务或不在岗（休息/下班）的检验员；④ 对符合条件的检验员按等级从高到低排序，指派给等级最高的空闲检验员；⑤ 检验单状态变更为「待检验」，该检验员收到任务通知。",
+                        "remark": "若检验员完成检验后，系统自动解除该检验单的指派锁定，可继续接收新的检验单。检验单也支持手动重新指派（有权限的上级可调整）。",
+                        "images": []
+                    }
+                ]
+            },
+            {
+                "title": "2. PQC 检验作业",
+                "sub_steps": [
+                    {
+                        "id": "2.1", "name": "进入检验清单",
                         "desc": "在质量检验模块中，进入【PQC 检验清单】页面。列表显示所有需要检验的单据，按状态分为「未确认」「未检验」「已验收」等页签。",
                         "remark": "",
                         "images": [
@@ -478,7 +508,7 @@ CONTENT = {
                         ]
                     },
                     {
-                        "id": "1.2", "name": "未确认单据 → 确认",
+                        "id": "2.2", "name": "未确认单据 → 确认",
                         "desc": "在「未确认」页签中，系统列出待确认的检验单据。选中需要操作的检验单，点击确认按钮，单据流转至「待检验」状态，等待检验员进行检验操作。",
                         "remark": "",
                         "images": [
@@ -487,7 +517,7 @@ CONTENT = {
                         ]
                     },
                     {
-                        "id": "1.3", "name": "计量检验项目录入",
+                        "id": "2.3", "name": "计量检验项目录入",
                         "desc": "进入「待检验」页签，选中检验单后进入检验界面。选择【计量检验项目】页签，使用量具测量后将实际测量值填入系统对应项目输入框中。系统自动根据规格上下限判定合格/不合格（绿色为合格）。",
                         "remark": "计量项目超出规格自动开立异常单。检验值超过规格上限或低于下限时触发。",
                         "images": [
@@ -496,7 +526,7 @@ CONTENT = {
                         ]
                     },
                     {
-                        "id": "1.4", "name": "计数检验项目录入",
+                        "id": "2.4", "name": "计数检验项目录入",
                         "desc": "切换至【计数检验项目】页签，根据实际检验情况选择各不良项目是否存在。若全部合格则不良数填 0；若存在不良则填入对应不良原因的数量。",
                         "remark": "计数项目按判别法则自动判定：当不良数达到设定标准时，系统自动开立异常单。",
                         "images": [
@@ -505,7 +535,7 @@ CONTENT = {
                         ]
                     },
                     {
-                        "id": "1.5", "name": "异常单开立",
+                        "id": "2.5", "name": "异常单开立",
                         "desc": "当检验结果触发判别法则时（计量超差/计数不良超标/法则设定为异常），系统弹出异常单开立窗口。填入异常单的分类群组、第一处理群组、验收群组及不良原因，点击完成生成异常单。",
                         "remark": "满足以下条件之一即触发：1)计数不良达标准 2)计量超规格 3)法则设定为「异常」。",
                         "images": [
@@ -514,7 +544,7 @@ CONTENT = {
                         ]
                     },
                     {
-                        "id": "1.6", "name": "判定检验结果",
+                        "id": "2.6", "name": "判定检验结果",
                         "desc": "异常单开立完毕后回到判定界面。若存在异常单，判定时可选择：整批报废（损坏数量=母体数量，判定不合格）或部分允收。若未触发异常单，则正常判定全部合格：填入允收数量和损坏数量，完成判定。检验单流转至「已验收」页签。",
                         "remark": "",
                         "images": [
@@ -525,10 +555,10 @@ CONTENT = {
                 ]
             },
             {
-                "title": "2. 质量异常处理",
+                "title": "3. 质量异常处理",
                 "sub_steps": [
                     {
-                        "id": "2.1", "name": "查看异常单",
+                        "id": "3.1", "name": "查看异常单",
                         "desc": "进入 Web 端质量控制模块的【质量异常单】功能，查看系统自动生成的异常单据列表。各群组检验员仅看到自己负责的异常单。选中需要处理的异常单，点击编辑进入处置界面。",
                         "remark": "异常单每一步指派与处置结果判断都支持发送邮箱提醒。",
                         "images": [
@@ -537,7 +567,7 @@ CONTENT = {
                         ]
                     },
                     {
-                        "id": "2.2", "name": "第一群组新建处置记录",
+                        "id": "3.2", "name": "第一群组新建处置记录",
                         "desc": "第一群组内的检验员在异常单界面新建处置记录，指派任意群组进行处理。填写处置说明后提交，异常单流转至被指派群组的待办列表。",
                         "remark": "",
                         "images": [
@@ -546,7 +576,7 @@ CONTENT = {
                         ]
                     },
                     {
-                        "id": "2.3", "name": "被指派群组处置对策",
+                        "id": "3.3", "name": "被指派群组处置对策",
                         "desc": "被指派群组收到消息提醒后，进入【处置结果验证】界面。在处置对策中填写具体的处理措施和方案，判断本次处置结果为 OK 或 NG 后提交。",
                         "remark": "",
                         "images": [
@@ -555,7 +585,7 @@ CONTENT = {
                         ]
                     },
                     {
-                        "id": "2.4", "name": "第一群组验证处置结果",
+                        "id": "3.4", "name": "第一群组验证处置结果",
                         "desc": "第一群组收到处置完成通知后，对处置结果进行验证。输入验证耗时和验证说明。若验证结果 OK，则核准处置记录，异常单进入「结案中」状态；若 NG，则打回至被指派群组重新处理。",
                         "remark": "",
                         "images": [
@@ -564,7 +594,7 @@ CONTENT = {
                         ]
                     },
                     {
-                        "id": "2.5", "name": "异常单结案",
+                        "id": "3.5", "name": "异常单结案",
                         "desc": "处置验证通过后，进入【结案记录】界面。输入本次异常单的结案描述，点击确定完成结案。异常单状态变更为「已结案」，处置流程结束。",
                         "remark": "",
                         "images": [
@@ -576,6 +606,7 @@ CONTENT = {
             }
         ],
         "notes": [
+            "检验单自动指派的前提是已完成检验员等级、岗位群组、设备位置群组等基础数据配置。",
             "检验员只对 QMS 单据判定界面进行操作，其余发起检验单操作不由检验员进行。",
             "异常单的每一步指派与处置结果均可发送邮箱提醒。",
             "IQC 检验前端作业流程与 PQC 一致，但单据由 ERP 发起。",
@@ -783,13 +814,33 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <a href="../index.html" class="sidebar-home-link">
-          <h2 class="sidebar-title">美诗儿 MES 操作指导书</h2>
+          <h2 class="sidebar-title">美诗儿 操作指导书</h2>
         </a>
       </div>
       <nav class="sidebar-modules">
-        <ul>
-          {module_nav}
-        </ul>
+        <div class="nav-group">
+          <div class="nav-group-title" onclick="toggleNav('mes')">
+            <span class="nav-arrow open" id="arrow-mes">&#9654;</span>
+            <span>MES</span>
+          </div>
+          <div class="nav-group-body open" id="nav-mes">
+            <ul>
+              {module_nav}
+            </ul>
+          </div>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-title" onclick="toggleNav('aps')">
+            <span class="nav-arrow" id="arrow-aps">&#9654;</span>
+            <span>APS</span>
+          </div>
+          <div class="nav-group-body" id="nav-aps">
+            <ul>
+              <li><a href="../pages/aps-monthly.html">📊 月度产能规划版本</a></li>
+              <li><a href="../pages/aps-workshop.html">📊 车间排产规划版本</a></li>
+            </ul>
+          </div>
+        </div>
       </nav>
       <div class="sidebar-divider"></div>
       <nav class="sidebar-sections">
@@ -808,7 +859,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
         {sections_html}
       </div>
       <footer class="page-footer">
-        <p>美诗儿（浙江）环境智能电器有限公司 - MES 操作指导书</p>
+        <p>美诗儿（浙江）环境智能电器有限公司 - MES &amp; APS 操作指导书</p>
         <p class="footer-edit-hint">提示：图片文件位于 <code>{img_dir}/</code> 目录，替换对应图片即可更新</p>
       </footer>
     </main>
@@ -912,19 +963,39 @@ def generate_index():
   <div class="index-layout">
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <h2 class="sidebar-title">美诗儿 MES 操作指导书</h2>
+        <h2 class="sidebar-title">美诗儿 操作指导书</h2>
       </div>
       <nav class="sidebar-modules">
-        <ul>
-          {index_toc}
-        </ul>
+        <div class="nav-group">
+          <div class="nav-group-title" onclick="toggleNav('mes')">
+            <span class="nav-arrow open" id="arrow-mes">&#9654;</span>
+            <span>MES</span>
+          </div>
+          <div class="nav-group-body open" id="nav-mes">
+            <ul>
+              {index_toc}
+            </ul>
+          </div>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-title" onclick="toggleNav('aps')">
+            <span class="nav-arrow" id="arrow-aps">&#9654;</span>
+            <span>APS</span>
+          </div>
+          <div class="nav-group-body" id="nav-aps">
+            <ul>
+              <li><a href="pages/aps-monthly.html">📊 月度产能规划版本</a></li>
+              <li><a href="pages/aps-workshop.html">📊 车间排产规划版本</a></li>
+            </ul>
+          </div>
+        </div>
       </nav>
     </aside>
     <main class="main-content">
       <header class="page-header index-header">
         <h1>美诗儿（浙江）环境智能电器有限公司</h1>
-        <p class="subtitle">MES 系统操作指导书</p>
-        <p class="desc">本手册包含以下操作模块，点击模块卡片或侧边栏目录查看详细内容。</p>
+        <p class="subtitle">MES &amp; APS 系统操作指导书</p>
+        <p class="desc">本手册包含MES操作模块和APS操作模块，点击模块卡片或侧边栏目录查看详细内容。</p>
       </header>
       <div class="module-grid">
         {module_cards}

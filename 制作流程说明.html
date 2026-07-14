@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>操作手册制作流程说明</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Microsoft YaHei", sans-serif;
+    background: #f0f4f8; color: #1a202c; padding: 40px 20px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  h1 {
+    text-align: center; font-size: 32px; margin-bottom: 8px;
+    background: linear-gradient(135deg, #1a73e8, #0d47a1);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .subtitle { text-align: center; color: #64748b; margin-bottom: 40px; font-size: 16px; }
+  .subtitle a { -webkit-text-fill-color: #1a73e8; }
+
+  /* Phase bar */
+  .phase-bar {
+    display: flex; gap: 8px; margin-bottom: 40px; flex-wrap: wrap;
+    justify-content: center;
+  }
+  .phase-tag {
+    padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600;
+    color: #fff; white-space: nowrap;
+  }
+  .phase-tag:nth-child(1) { background: #0d47a1; }
+  .phase-tag:nth-child(2) { background: #1565c0; }
+  .phase-tag:nth-child(3) { background: #1976d2; }
+  .phase-tag:nth-child(4) { background: #1e88e5; }
+  .phase-tag:nth-child(5) { background: #2196f3; }
+  .phase-tag:nth-child(6) { background: #42a5f5; }
+  .phase-tag:nth-child(7) { background: #64b5f6; color: #0d47a1; }
+
+  /* Phase Section */
+  .phase { margin-bottom: 32px; }
+  .phase-header {
+    display: flex; align-items: center; gap: 16px;
+    background: #fff; border-radius: 12px; padding: 16px 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 16px;
+    cursor: pointer;
+  }
+  .phase-num {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; font-size: 18px; flex-shrink: 0;
+  }
+  .phase-header h2 { font-size: 18px; flex: 1; }
+  .phase-header .badge {
+    font-size: 12px; padding: 4px 12px; border-radius: 12px;
+    background: #e8f0fe; color: #1a73e8; font-weight: 600;
+  }
+  .phase-content { display: flex; flex-direction: column; gap: 12px; padding-left: 56px; }
+
+  /* Step Card */
+  .step-card {
+    background: #fff; border-radius: 10px; padding: 16px 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    border-left: 4px solid #1a73e8; position: relative;
+  }
+  .step-card .title { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+  .step-card .title .step-num { color: #1a73e8; margin-right: 8px; }
+  .step-card .desc { font-size: 14px; color: #475569; line-height: 1.7; }
+  .step-card .desc code {
+    background: #f1f5f9; padding: 2px 6px; border-radius: 4px;
+    font-family: "Consolas", monospace; font-size: 13px; color: #e11d48;
+  }
+  .step-card .tags { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .step-card .tags span {
+    font-size: 11px; padding: 3px 10px; border-radius: 10px;
+    background: #f1f5f9; color: #64748b;
+  }
+  .step-card .tags span.file { background: #e8f0fe; color: #1a73e8; }
+  .step-card .tags span.warn { background: #fef3c7; color: #92400e; }
+
+  /* Arrow between steps */
+  .step-arrow {
+    text-align: center; color: #94a3b8; font-size: 20px;
+    padding: 2px 0;
+  }
+
+  /* Key Point box */
+  .key-point {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-radius: 10px; padding: 16px 20px; margin-bottom: 12px;
+    border-left: 4px solid #f59e0b;
+  }
+  .key-point .title { font-weight: 700; font-size: 14px; color: #92400e; margin-bottom: 4px; }
+  .key-point .desc { font-size: 13px; color: #78350f; line-height: 1.6; }
+
+  /* Deployment Section */
+  .deploy-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px; margin-top: 16px;
+  }
+  .deploy-card {
+    background: #fff; border-radius: 10px; padding: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    border-top: 4px solid #1a73e8;
+  }
+  .deploy-card h4 { font-size: 15px; margin-bottom: 8px; }
+  .deploy-card p { font-size: 13px; color: #475569; line-height: 1.6; }
+  .deploy-card .cmd {
+    background: #1e293b; color: #e2e8f0; padding: 8px 12px; border-radius: 6px;
+    font-family: "Consolas", monospace; font-size: 12px; margin-top: 8px;
+  }
+
+  /* File Tree */
+  .file-tree {
+    background: #1e293b; border-radius: 10px; padding: 20px 24px;
+    color: #e2e8f0; font-family: "Consolas", monospace; font-size: 13px;
+    line-height: 1.8; margin-top: 16px;
+  }
+  .file-tree .dir { color: #60a5fa; }
+  .file-tree .file { color: #94a3b8; }
+  .file-tree .hl { color: #fbbf24; }
+
+  /* Footer */
+  footer {
+    text-align: center; margin-top: 40px; padding: 20px;
+    color: #94a3b8; font-size: 13px;
+  }
+
+  @media (max-width: 640px) {
+    .phase-content { padding-left: 0; }
+    body { padding: 20px 12px; }
+    h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>📘 MES 操作指导书 · 制作全流程</h1>
+  <p class="subtitle">
+    从需求分析到部署上线 — 完整制作流程说明
+    · 项目: <a href="https://github.com/wanghongyec-beep/mayshel-esop" target="_blank">mayshel-esop</a>
+  </p>
+
+  <div class="phase-bar">
+    <span class="phase-tag">① 需求分析</span>
+    <span class="phase-tag">② 内容采集</span>
+    <span class="phase-tag">③ 图片处理</span>
+    <span class="phase-tag">④ 代码开发</span>
+    <span class="phase-tag">⑤ 内容编写</span>
+    <span class="phase-tag">⑥ 生成校验</span>
+    <span class="phase-tag">⑦ 部署上线</span>
+  </div>
+
+  <!-- Phase 1 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num" style="background:#0d47a1;">1</div>
+      <h2>需求分析 — 确定模块与内容范围</h2>
+      <span class="badge">输入：客户需求</span>
+    </div>
+    <div class="phase-content">
+      <div class="step-card">
+        <div class="title"><span class="step-num">1.1</span>确定操作手册涵盖的车间/部门</div>
+        <div class="desc">
+          与客户（美诗儿）确认需要制作操作手册的模块范围：<br>
+          <strong>最终确定 5 大模块：</strong>🏭 注塑车间 · 🏭 组装车间 · ⚙️ 设备维保 · 🔧 模具维保 · 📋 质量检验<br>
+          <strong>已剔除：</strong>IIoT 设备看板、系统基础配置（客户确认不需要）
+        </div>
+        <div class="tags">
+          <span>输出：模块清单</span>
+          <span>决定：5 大模块</span>
+        </div>
+      </div>
+      <div class="step-arrow">↓</div>
+      <div class="step-card">
+        <div class="title"><span class="step-num">1.2</span>收集参考文档与素材</div>
+        <div class="desc">
+          从客户处获取参考材料：<br>
+          📄 <strong>Word 文档</strong> — 各模块的原始操作说明文档（.doc格式）<br>
+          📄 <strong>PDF 参考</strong> — 鼎捷标准功能操作简报（PL102 设备稼动、PL205 模治具寿命管理）<br>
+          🖼️ <strong>截图素材</strong> — 已有操作截图图片
+        </div>
+        <div class="tags">
+          <span class="file">源文件：*.doc</span>
+          <span class="file">PL102.pdf</span>
+          <span class="file">PL205.pdf</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num" style="background:#1565c0;">2</div>
+      <h2>内容采集 — 从文档提取操作步骤</h2>
+      <span class="badge">输入：Word / PDF</span>
+    </div>
+    <div class="phase-content">
+      <div class="step-card">
+        <div class="title"><span class="step-num">2.1</span>Word 文档解析</div>
+        <div class="desc">
+          使用 <code>python-docx</code> 库读取 Word 文档，提取章节标题、操作步骤描述文字。
+          遇到加密文档时使用 <code>olefile</code> + <code>antiword</code> 等方式进行解密读取。
+        </div>
+        <div class="tags">
+          <span class="file">工具：python-docx</span>
+          <span class="file">工具：antiword</span>
+        </div>
+      </div>
+      <div class="step-arrow">↓</div>
+      <div class="step-card">
+        <div class="title"><span class="step-num">2.2</span>PDF 参考文档解读</div>
+        <div class="desc">
+          对鼎捷标准 PDF 简报进行文字提取和页面分析：<br>
+          🔍 使用 <code>pdfminer.six</code> + <code>PyMuPDF (fitz)</code> 提取 PDF 文字内容<br>
+          🔍 逐页分析文字描述，找到与操作步骤匹配的内容<br>
+          🔍 特别注意「设备稼动闭环」、「维修闭环」、「保养闭环」等核心业务流程
+        </div>
+        <div class="tags">
+          <span class="warn">关键：文字-图片对应</span>
+          <span class="file">工具：PyMuPDF</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num" style="background:#1976d2;">3</div>
+      <h2>图片处理 — 提取并匹配截图</h2>
+      <span class="badge">输入：PDF截图</span>
+    </div>
+    <div class="phase-content">
+      <div class="step-card">
+        <div class="title"><span class="step-num">3.1</span>从 PDF 中提取截图</div>
+        <div class="desc">
+          使用 <code>PyMuPDF</code> 的 <code>page.get_images()</code> 提取 PDF 中嵌入的所有图片。
+          筛选出有效截图（排除装饰性元素），按页面编号命名保存。
+        </div>
+        <div class="tags">
+          <span class="file">PL102 提取 80+ 张</span>
+          <span class="file">PL205 提取 60+ 张</span>
+        </div>
+      </div>
+      <div class="step-arrow">↓</div>
+      <div class="step-card">
+        <div class="title"><span class="step-num">3.2</span>图片匹配（关键步骤）</div>
+        <div class="desc">
+          将 PDF 中的文字描述与 HTML 中的操作步骤逐条对照匹配，确定每张截图对应的操作内容。<br>
+          <strong>匹配方法：</strong><br>
+          ① 找到 PDF 中描述某操作步骤的页面<br>
+          ② 提取该页上的主要截图<br>
+          ③ 验证截图内容是否与文字描述一致<br>
+          <strong>示例：</strong>PDF P59 描述"在作业人员工作平台找到设备" → 对应 HTML 步骤 1.1 "进入工作平台"
+        </div>
+        <div class="tags">
+          <span class="warn">最重要步骤</span>
+          <span>确保图文一致</span>
+        </div>
+      </div>
+      <div class="step-arrow">↓</div>
+      <div class="step-card">
+        <div class="title"><span class="step-num">3.3</span>图片转换与命名</div>
+        <div class="desc">
+          将 JPEG 格式的 PDF 截图转换为 PNG 格式（<code>PIL.Image.save()</code>），
+          按 <code>fig-01.png</code>、<code>fig-02.png</code> 规则统一命名，
+          放入对应模块的 <code>images/</code> 子目录。
+        </div>
+        <div class="tags">
+          <span class="file">images/equipment/fig-01~16.png</span>
+          <span class="file">images/mold/fig-01~07.png</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num" style="background:#1e88e5;">4</div>
+      <h2>代码开发 — Python 生成器</h2>
+      <span class="badge">核心：generate.py</span>
+    </div>
+    <div class="phase-content">
+      <div class="step-card">
+        <div class="title"><span class="step-num">4.1</span>编写 HTML 生成引擎</div>
+        <div class="desc">
+          开发 <code>generate.py</code>，实现以下核心功能：<br>
+          📌 <strong>内容字典（CONTENT）</strong>— 用 Python dict 定义所有模块的结构化数据：标题、部门、图标、图片目录、场景说明、步骤列表、注意事项<br>
+          📌 <strong>HTML 模板引擎</strong>— 使用字符串模板 + <code>str.replace()</code> 渲染页面<br>
+          📌 <strong>SVG 流程图生成</strong>— 根据步骤数据自动绘制水平方向流程图，包含主步骤→子步骤箭头连线<br>
+          📌 <strong>图文配对布局</strong>— 每步操作对应截图，图片在左/文字在右
+        </div>
+        <div class="tags">
+          <span class="file">generate.py</span>
+          <span>~580 行代码</span>
+        </div>
+      </div>
+      <div class="step-arrow">↓</div>
+      <div class="step-card">
+        <div class="title"><span class="step-num">4.2</span>CSS 样式设计</div>
+        <div class="desc">
+          📌 <strong>布局：</strong>固定侧边栏(260px) + 主内容区全宽<br>
+          📌 <strong>图片：</strong>max-height:500px，支持双图并排<br>
+          📌 <strong>交互：</strong>鼠标悬停阴影、图片点击放大（Zoom Overlay）<br>
+          📌 <strong>颜色：</strong>蓝色主色调(#1a73e8) + 浅灰背景
+        </div>
+        <div class="tags">
+          <span class="file">css/style.css</span>
+          <span>响应式设计</span>
+        </div>
+      </div>
+      <div class="step-arrow">↓</div>
+      <div class="step-card">
+        <div class="title"><span class="step-num">4.3</span>JavaScript 交互</div>
+        <div class="desc">
+          📌 <strong>图片放大：</strong>点击图片打开全屏遮罩预览（支持 SVG 和 PNG）<br>
+          📌 <strong>滚动监听：</strong>页面滚动时自动高亮当前章节
+        </div>
+        <div class="tags">
+          <span class="file">js/main.js</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 5 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num" style="background:#2196f3;">5</div>
+      <h2>内容编写 — 结构化数据录入</h2>
+      <span class="badge">核心：CONTENT 字典</span>
+    </div>
+    <div class="phase-content">
+      <div class="key-point">
+        <div class="title">💡 数据结构设计</div>
+        <div class="desc">
+          每个模块都是一个字典，包含：title / dept / icon / img_dir / scenario(场景说明列表) /
+          steps(主步骤列表，每个包含 title + sub_steps) / notes(注意事项)
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="title"><span class="step-num">5.1</span>注塑车间 & 组装车间</div>
+        <div class="desc">
+          流程：派工作业 → 上工作业 → 产线点检 → 报工作业<br>
+          共 4 个主步骤，13+ 个子步骤，详细描述每个操作环节
+        </div>
+      </div>
+      <div class="step-arrow">↓</div>
+      <div class="step-card">
+        <div class="title"><span class="step-num">5.2</span>设备维保（从 PL102 PDF 重构）</div>
+        <div class="desc">
+          <strong>核心概念：</strong>设备稼动 — 状态变更与闭环管理<br>
+          重新梳理为 3 个主步骤：<br>
+          ① 设备稼动（基础操作）→ ② 状态变更场景（设置/维修/保养/暂停闭环）→ ③ 设备保养作业<br>
+          <strong>闭环原则：</strong>原状态 → 目标状态 → 回归原状态<br>
+          <strong>维修闭环：</strong>加工中→故障→维修→加工中
+        </div>
+        <div class="tags">
+          <span class="warn">重点重构</span>
+          <span>引用：PL102</span>
+        </div>
+      </div>
+      <div class="step-arrow">↓</div>
+      <div class="step-card">
+        <div class="title"><span class="step-num">5.3</span>模具维保（从 PL205 PDF 重构）</div>
+        <div class="desc">
+          <strong>核心概念：</strong>模具全生命周期管理<br>
+          重新梳理为 4 个主步骤：<br>
+          ① 异常叫修 → ② 维修执行（维修闭环）→ ③ 定期保养（保养闭环）→ ④ 报表查看<br>
+          <strong>维修闭环：</strong>异常发现→叫修→签收→维修作业→完工确认→恢复可用
+        </div>
+        <div class="tags">
+          <span class="warn">重点重构</span>
+          <span>引用：PL205</span>
+        </div>
+      </div>
+      <div class="step-arrow">↓</div>
+      <div class="step-card">
+        <div class="title"><span class="step-num">5.4</span>质量检验</div>
+        <div class="desc">
+          流程：PQC 首件检验 → 过程检验 → 质量异常处置<br>
+          2 个主步骤，11 个子步骤
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 6 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num" style="background:#42a5f5;">6</div>
+      <h2>生成与校验 — 输出 HTML</h2>
+      <span class="badge">输出：HTML 页面</span>
+    </div>
+    <div class="phase-content">
+      <div class="step-card">
+        <div class="title"><span class="step-num">6.1</span>运行生成器</div>
+        <div class="desc">
+          执行 <code>python generate.py</code>，程序自动：<br>
+          ① 遍历 <code>CONTENT</code> 字典中的所有模块<br>
+          ② 对每个模块：渲染场景说明→生成 SVG 流程图→渲染步骤说明→渲染注意事项<br>
+          ③ 输出 HTML 文件到 <code>pages/</code> 目录<br>
+          ④ 生成首页 <code>index.html</code>（模块卡片导航）
+        </div>
+        <div class="tags">
+          <span class="file">python generate.py</span>
+          <span>1 次运行生成 6 个页面</span>
+        </div>
+      </div>
+      <div class="step-arrow">↓</div>
+      <div class="step-card">
+        <div class="title"><span class="step-num">6.2</span>校验与修正</div>
+        <div class="desc">
+          ✅ 打开 HTML 页面检查排版是否正确<br>
+          ✅ 验证图片是否正常加载、图文是否对应<br>
+          ✅ 检查流程图箭头方向是否正确<br>
+          ✅ 验证侧边栏导航是否完整<br>
+          ✅ 客户反馈修正（如"图片不对"→重新匹配）
+        </div>
+        <div class="tags">
+          <span class="warn">迭代循环</span>
+          <span>多次修正</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase 7 -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num" style="background:#64b5f6;">7</div>
+      <h2>部署上线 — 让客户访问</h2>
+      <span class="badge">输出：可访问的网址</span>
+    </div>
+    <div class="phase-content">
+      <div class="key-point">
+        <div class="title">📌 最终方案选择</div>
+        <div class="desc">
+          我们准备了 3 种部署方式，最终选择了 <strong>GitHub Pages + Cloudflare Pages</strong> 作为正式发布方案，
+          本地 HTTP 服务器作为临时查看方案。
+        </div>
+      </div>
+
+      <div class="deploy-grid">
+        <div class="deploy-card">
+          <h4>📁 方案A：本地服务器</h4>
+          <p>局域网内临时查看，电脑不能关机</p>
+          <div class="cmd">python server.py</div>
+          <p style="margin-top:8px;font-size:12px;color:#94a3b8;">
+            适合：开发调试 / 临时展示
+          </p>
+        </div>
+        <div class="deploy-card">
+          <h4>🐙 方案B：GitHub Pages</h4>
+          <p>代码推送到 GitHub 仓库，自动部署</p>
+          <div class="cmd">git push origin main</div>
+          <p style="margin-top:8px;font-size:12px;color:#94a3b8;">
+            适合：国内客户访问<br>
+            网址：wanghongyec-beep.github.io/mayshel-esop
+          </p>
+        </div>
+        <div class="deploy-card">
+          <h4>☁️ 方案C：Cloudflare Pages</h4>
+          <p>连接 GitHub 仓库，自动 CDN 加速</p>
+          <div class="cmd">连接 Git → 自动部署</div>
+          <p style="margin-top:8px;font-size:12px;color:#94a3b8;">
+            适合：全球客户访问<br>
+            网址：xxxx.pages.dev
+          </p>
+        </div>
+      </div>
+
+      <div class="step-card" style="margin-top:16px;">
+        <div class="title"><span class="step-num">7.1</span>Git 版本管理</div>
+        <div class="desc">
+          使用 Git 进行版本控制：<br>
+          📌 初始化新仓库 → 添加远程地址 → 提交代码 → 推送到 GitHub<br>
+          📌 SSH 密钥认证：生成密钥对 → 添加到 GitHub Settings → 免密推送
+        </div>
+        <div class="tags">
+          <span class="file">git init</span>
+          <span class="file">ssh-keygen</span>
+          <span class="file">git push</span>
+        </div>
+      </div>
+      <div class="step-arrow">↓</div>
+      <div class="step-card">
+        <div class="title"><span class="step-num">7.2</span>最终交付</div>
+        <div class="desc">
+          🎯 客户通过网址直接访问操作手册，无需安装任何软件<br>
+          🎯 所有页面在任何浏览器/手机/平板上均可正常打开<br>
+          🎯 后续更新：修改 <code>generate.py</code> 中的内容 → 重新生成 → 推送即可
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- File Structure -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num" style="background:#0d47a1;">📁</div>
+      <h2>最终项目结构</h2>
+      <span class="badge">交付物</span>
+    </div>
+    <div class="phase-content">
+      <div class="file-tree">
+<span class="dir">操作手册/</span>
+├── <span class="hl">index.html</span>              ← 首页（5 模块卡片导航）
+├── <span class="hl">generate.py</span>             ← 核心生成器（~580 行）
+├── <span class="hl">server.py</span>                ← HTTP 服务器
+├── 启动服务器.bat                ← 一键启动脚本
+├── <span class="dir">css/</span>
+│   └── style.css                 ← 全部样式
+├── <span class="dir">js/</span>
+│   └── main.js                   ← 图片放大 + 滚动监听
+├── <span class="dir">pages/</span>
+│   ├── <span class="hl">injection.html</span>         ← 注塑车间操作手册
+│   ├── <span class="hl">assembly.html</span>          ← 组装车间操作手册
+│   ├── <span class="hl">equipment.html</span>         ← 设备维保操作手册
+│   ├── <span class="hl">mold.html</span>               ← 模具维保操作手册
+│   └── <span class="hl">quality.html</span>            ← 质量检验操作手册
+└── <span class="dir">images/</span>
+    ├── <span class="dir">equipment/</span>              ← 16 张设备维保截图
+    ├── <span class="dir">mold/</span>                   ← 7 张模具维保截图
+    ├── <span class="dir">production-injection/</span>   ← 注塑车间截图
+    ├── <span class="dir">production-assembly/</span>    ← 组装车间截图
+    └── <span class="dir">quality/</span>                 ← 质量检验截图
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>美诗儿（浙江）环境智能电器有限公司 · MES 操作指导书 · 制作流程说明</p>
+    <p style="margin-top:4px;">版本 3.0 · 2026 年 7 月</p>
+  </footer>
+</div>
+</body>
+</html>

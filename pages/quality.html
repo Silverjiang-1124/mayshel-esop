@@ -67,14 +67,15 @@
         <div class="section-content scenario-content">
   <p>在生产流程中对半成品或关键工序进行动态监控。在 MES 中关键工序发起首检后生成 PQC 首件检查单据，进站后生成检验单据、出站后生成检验单据，供检验员进行检验及异常处理操作。</p>
   <p>系统支持检验单的自动指派功能：当检验单生成时，系统根据检验类型、岗位群组、设备位置群组及检验员等级，自动将检验单分派给最合适的检验员。</p>
+  <p>不同类型的产线可设定不同的产品检验数量规则：组装线的检验数量 = 大箱装入只数 × 检验系数（系数必须为 0.5 的倍数）；注塑机的检验数量 = 装载数。</p>
   <p>注：IQC 检验前端检验作业流程与 PQC 一致，但单据发起由 ERP 进行操作。</p>
-  <p>本手册说明检验单基础配置与自动指派逻辑、PQC 检验作业及质量异常处置三大模块的系统操作步骤。</p>
+  <p>本手册说明产品检验数维护、检验单基础配置与自动指派逻辑、PQC 检验作业及质量异常处置四大模块的系统操作步骤。</p>
 </div>
 
       </section>      <section class="doc-section" id="flowchart">
         <h2 class="section-title">流程图</h2>
         <div class="section-content flowchart-content">
-<svg class="flowchart-svg" viewBox="0 0 630 220" xmlns="http://www.w3.org/2000/svg">
+<svg class="flowchart-svg" viewBox="0 0 836 220" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
       <polygon points="0 0, 8 3, 0 6" fill="#1a73e8"/>
@@ -84,61 +85,70 @@
     </filter>
   </defs>
   <rect x="24" y="20" width="170" height="28" rx="6" fill="#1a73e8" filter="url(#shadow)"/>
-  <text x="109" y="38" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">1. 检验单基础配置与自动指派</text>
+  <text x="109" y="38" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">1. 产品检验数维护</text>
   <line x1="194" y1="34" x2="214" y2="34" stroke="#1a73e8" stroke-width="1.5" marker-end="url(#arrowhead)"/>
   <rect x="32" y="58" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
-  <text x="109" y="71" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">1.1 检验员等级设定</text>
+  <text x="109" y="71" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">1.1 组装检验数维护</text>
   <line x1="109" y1="48" x2="109" y2="58" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
   <rect x="32" y="82" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
-  <text x="109" y="95" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">1.2 岗位绑定检验群组</text>
+  <text x="109" y="95" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">1.2 注塑检验数维护</text>
   <line x1="109" y1="78" x2="109" y2="82" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
-  <rect x="32" y="106" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
-  <text x="109" y="119" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">1.3 设备位置绑定检验群组</text>
-  <line x1="109" y1="102" x2="109" y2="106" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
-  <rect x="32" y="130" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
-  <text x="109" y="143" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">1.4 检验群组维护</text>
-  <line x1="109" y1="126" x2="109" y2="130" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
-  <rect x="32" y="154" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
-  <text x="109" y="167" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">1.5 检验单自动指派流程</text>
-  <line x1="109" y1="150" x2="109" y2="154" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
   <rect x="230" y="20" width="170" height="28" rx="6" fill="#1a73e8" filter="url(#shadow)"/>
-  <text x="315" y="38" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">2. PQC 检验作业</text>
+  <text x="315" y="38" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">2. 检验单基础配置与自动指派</text>
   <line x1="400" y1="34" x2="420" y2="34" stroke="#1a73e8" stroke-width="1.5" marker-end="url(#arrowhead)"/>
   <rect x="238" y="58" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
-  <text x="315" y="71" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">2.1 进入检验清单</text>
+  <text x="315" y="71" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">2.1 检验员等级设定</text>
   <line x1="315" y1="48" x2="315" y2="58" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
   <rect x="238" y="82" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
-  <text x="315" y="95" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">2.2 未确认单据 → 确认</text>
+  <text x="315" y="95" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">2.2 岗位绑定检验群组</text>
   <line x1="315" y1="78" x2="315" y2="82" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
   <rect x="238" y="106" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
-  <text x="315" y="119" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">2.3 计量检验项目录入</text>
+  <text x="315" y="119" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">2.3 设备位置绑定检验群组</text>
   <line x1="315" y1="102" x2="315" y2="106" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
   <rect x="238" y="130" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
-  <text x="315" y="143" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">2.4 计数检验项目录入</text>
+  <text x="315" y="143" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">2.4 检验群组维护</text>
   <line x1="315" y1="126" x2="315" y2="130" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
   <rect x="238" y="154" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
-  <text x="315" y="167" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">2.5 异常单开立</text>
+  <text x="315" y="167" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">2.5 检验单自动指派流程</text>
   <line x1="315" y1="150" x2="315" y2="154" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
-  <rect x="238" y="178" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
-  <text x="315" y="191" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">2.6 判定检验结果</text>
-  <line x1="315" y1="174" x2="315" y2="178" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
   <rect x="436" y="20" width="170" height="28" rx="6" fill="#1a73e8" filter="url(#shadow)"/>
-  <text x="521" y="38" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">3. 质量异常处理</text>
+  <text x="521" y="38" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">3. PQC 检验作业</text>
+  <line x1="606" y1="34" x2="626" y2="34" stroke="#1a73e8" stroke-width="1.5" marker-end="url(#arrowhead)"/>
   <rect x="444" y="58" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
-  <text x="521" y="71" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">3.1 查看异常单</text>
+  <text x="521" y="71" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">3.1 进入检验清单</text>
   <line x1="521" y1="48" x2="521" y2="58" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
   <rect x="444" y="82" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
-  <text x="521" y="95" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">3.2 第一群组新建处置记录</text>
+  <text x="521" y="95" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">3.2 未确认单据 → 确认</text>
   <line x1="521" y1="78" x2="521" y2="82" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
   <rect x="444" y="106" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
-  <text x="521" y="119" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">3.3 被指派群组处置对策</text>
+  <text x="521" y="119" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">3.3 计量检验项目录入</text>
   <line x1="521" y1="102" x2="521" y2="106" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
   <rect x="444" y="130" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
-  <text x="521" y="143" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">3.4 第一群组验证处置结果</text>
+  <text x="521" y="143" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">3.4 计数检验项目录入</text>
   <line x1="521" y1="126" x2="521" y2="130" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
   <rect x="444" y="154" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
-  <text x="521" y="167" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">3.5 异常单结案</text>
+  <text x="521" y="167" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">3.5 异常单开立</text>
   <line x1="521" y1="150" x2="521" y2="154" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <rect x="444" y="178" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
+  <text x="521" y="191" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">3.6 判定检验结果</text>
+  <line x1="521" y1="174" x2="521" y2="178" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <rect x="642" y="20" width="170" height="28" rx="6" fill="#1a73e8" filter="url(#shadow)"/>
+  <text x="727" y="38" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">4. 质量异常处理</text>
+  <rect x="650" y="58" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
+  <text x="727" y="71" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">4.1 查看异常单</text>
+  <line x1="727" y1="48" x2="727" y2="58" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <rect x="650" y="82" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
+  <text x="727" y="95" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">4.2 第一群组新建处置记录</text>
+  <line x1="727" y1="78" x2="727" y2="82" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <rect x="650" y="106" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
+  <text x="727" y="119" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">4.3 被指派群组处置对策</text>
+  <line x1="727" y1="102" x2="727" y2="106" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <rect x="650" y="130" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
+  <text x="727" y="143" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">4.4 第一群组验证处置结果</text>
+  <line x1="727" y1="126" x2="727" y2="130" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
+  <rect x="650" y="154" width="155" height="20" rx="4" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1" filter="url(#shadow)"/>
+  <text x="727" y="167" text-anchor="middle" fill="#1a73e8" font-size="9" font-weight="500">4.5 异常单结案</text>
+  <line x1="727" y1="150" x2="727" y2="154" stroke="#1a73e8" stroke-width="1" marker-end="url(#arrowhead)"/>
 </svg>
 
 </div>
@@ -146,8 +156,35 @@
       </section>      <section class="doc-section" id="steps">
         <h2 class="section-title">操作步骤说明</h2>
         <div class="section-content steps-content">
-  <h3 class="step-group-title">1. 检验单基础配置与自动指派</h3>
-  <div class="sub-step-header">1.1 检验员等级设定</div>
+  <h3 class="step-group-title">1. 产品检验数维护</h3>
+  <div class="sub-step-header">1.1 组装检验数维护</div>
+  <div class="step-pair">
+    <div class="step-pair-imgs">
+      <figure class="step-figure">
+        <img src="../images/quality/1.1组装检验数.png" alt="组装检验数维护">
+        <figcaption>组装检验数维护</figcaption>
+      </figure>
+    </div>
+    <div class="step-pair-text">
+      <div class="step-desc"><strong>作业说明：</strong>在【产品检验数维护】功能中，配置组装线的产品检验数量规则。组装检验数 = 大箱装入只数 × 检验系数。检验系数必须为 0.5 的倍数（如 0.5、1.0、1.5 等），由质量管理员根据产品特性和检验要求设定。例如大箱装入 100 只、检验系数 1.0，则检验数为 100。</div>
+      <div class="step-remark"><strong>备注：</strong>检验系数需严格按 0.5 的倍数填写，系统会自动校验。系数越大抽样越多，检验精度越高但工作量也越大。</div>
+    </div>
+  </div>
+  <div class="sub-step-header">1.2 注塑检验数维护</div>
+  <div class="step-pair">
+    <div class="step-pair-imgs">
+      <figure class="step-figure">
+        <img src="../images/quality/1.2注塑检验数.png" alt="注塑检验数维护">
+        <figcaption>注塑检验数维护</figcaption>
+      </figure>
+    </div>
+    <div class="step-pair-text">
+      <div class="step-desc"><strong>作业说明：</strong>在【产品检验数维护】功能中，配置注塑机的产品检验数量规则。注塑检验数 = 装载数，即每模/每盘的实际装载数量。系统根据产品设定的装载数自动确定注塑产品的检验数量。</div>
+      <div class="step-remark"><strong>备注：</strong>注塑检验数直接取装载数，无需额外系数计算。不同产品可分别设定不同的装载数。</div>
+    </div>
+  </div>
+  <h3 class="step-group-title">2. 检验单基础配置与自动指派</h3>
+  <div class="sub-step-header">2.1 检验员等级设定</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
       <figure class="step-figure">
@@ -164,7 +201,7 @@
       <div class="step-remark"><strong>备注：</strong>检验员等级由质量部在后台统一维护。只有达到设定等级的检验员才会被系统指派处理该类型的检验单。</div>
     </div>
   </div>
-  <div class="sub-step-header">1.2 岗位绑定检验群组</div>
+  <div class="sub-step-header">2.2 岗位绑定检验群组</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
       <figure class="step-figure">
@@ -181,7 +218,7 @@
       <div class="step-remark"><strong>备注：</strong>一个岗位可以绑定多个检验群组，一个检验群组也可以服务于多个岗位，按实际管理需要灵活配置。</div>
     </div>
   </div>
-  <div class="sub-step-header">1.3 设备位置绑定检验群组</div>
+  <div class="sub-step-header">2.3 设备位置绑定检验群组</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
       <figure class="step-figure">
@@ -198,7 +235,7 @@
       <div class="step-remark"><strong>备注：</strong>设备位置群组与岗位群组为双重校验机制，系统会综合两者来筛选最合适的检验员。</div>
     </div>
   </div>
-  <div class="sub-step-header">1.4 检验群组维护</div>
+  <div class="sub-step-header">2.4 检验群组维护</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
       <figure class="step-figure">
@@ -215,7 +252,7 @@
       <div class="step-remark"><strong>备注：</strong>一个检验员可以属于多个检验群组。群组内的所有检验员均需先完成检验员等级设定，才能在自动指派时被匹配到。</div>
     </div>
   </div>
-  <div class="sub-step-header">1.5 检验单自动指派流程</div>
+  <div class="sub-step-header">2.5 检验单自动指派流程</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
       <figure class="step-figure">
@@ -228,8 +265,8 @@
       <div class="step-remark"><strong>备注：</strong>若检验员完成检验后，系统自动解除该检验单的指派锁定，可继续接收新的检验单。检验单也支持手动重新指派（有权限的上级可调整）。</div>
     </div>
   </div>
-  <h3 class="step-group-title">2. PQC 检验作业</h3>
-  <div class="sub-step-header">2.1 进入检验清单</div>
+  <h3 class="step-group-title">3. PQC 检验作业</h3>
+  <div class="sub-step-header">3.1 进入检验清单</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
       <figure class="step-figure">
@@ -241,7 +278,7 @@
       <div class="step-desc"><strong>作业说明：</strong>在质量检验模块中，进入【PQC 检验清单】页面。列表显示所有需要检验的单据，按状态分为「未确认」「未检验」「已验收」等页签。</div>
     </div>
   </div>
-  <div class="sub-step-header">2.2 未确认单据 → 确认</div>
+  <div class="sub-step-header">3.2 未确认单据 → 确认</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
       <figure class="step-figure">
@@ -257,7 +294,7 @@
       <div class="step-desc"><strong>作业说明：</strong>在「未确认」页签中，系统列出待确认的检验单据。选中需要操作的检验单，点击确认按钮，单据流转至「待检验」状态，等待检验员进行检验操作。</div>
     </div>
   </div>
-  <div class="sub-step-header">2.3 计量检验项目录入</div>
+  <div class="sub-step-header">3.3 计量检验项目录入</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
       <figure class="step-figure">
@@ -274,7 +311,7 @@
       <div class="step-remark"><strong>备注：</strong>计量项目超出规格自动开立异常单。检验值超过规格上限或低于下限时触发。</div>
     </div>
   </div>
-  <div class="sub-step-header">2.4 计数检验项目录入</div>
+  <div class="sub-step-header">3.4 计数检验项目录入</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
       <figure class="step-figure">
@@ -291,7 +328,7 @@
       <div class="step-remark"><strong>备注：</strong>计数项目按判别法则自动判定：当不良数达到设定标准时，系统自动开立异常单。</div>
     </div>
   </div>
-  <div class="sub-step-header">2.5 异常单开立</div>
+  <div class="sub-step-header">3.5 异常单开立</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
       <figure class="step-figure">
@@ -308,7 +345,7 @@
       <div class="step-remark"><strong>备注：</strong>满足以下条件之一即触发：1)计数不良达标准 2)计量超规格 3)法则设定为「异常」。</div>
     </div>
   </div>
-  <div class="sub-step-header">2.6 判定检验结果</div>
+  <div class="sub-step-header">3.6 判定检验结果</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
       <figure class="step-figure">
@@ -324,8 +361,8 @@
       <div class="step-desc"><strong>作业说明：</strong>异常单开立完毕后回到判定界面。若存在异常单，判定时可选择：整批报废（损坏数量=母体数量，判定不合格）或部分允收。若未触发异常单，则正常判定全部合格：填入允收数量和损坏数量，完成判定。检验单流转至「已验收」页签。</div>
     </div>
   </div>
-  <h3 class="step-group-title">3. 质量异常处理</h3>
-  <div class="sub-step-header">3.1 查看异常单</div>
+  <h3 class="step-group-title">4. 质量异常处理</h3>
+  <div class="sub-step-header">4.1 查看异常单</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
       <figure class="step-figure">
@@ -338,7 +375,7 @@
       <div class="step-remark"><strong>备注：</strong>异常单每一步指派与处置结果判断都支持发送邮箱提醒。</div>
     </div>
   </div>
-  <div class="sub-step-header">3.2 第一群组新建处置记录</div>
+  <div class="sub-step-header">4.2 第一群组新建处置记录</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
       <figure class="step-figure">
@@ -354,7 +391,7 @@
       <div class="step-desc"><strong>作业说明：</strong>第一群组内的检验员在异常单界面新建处置记录，指派任意群组进行处理。填写处置说明后提交，异常单流转至被指派群组的待办列表。</div>
     </div>
   </div>
-  <div class="sub-step-header">3.3 被指派群组处置对策</div>
+  <div class="sub-step-header">4.3 被指派群组处置对策</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
       <figure class="step-figure">
@@ -370,7 +407,7 @@
       <div class="step-desc"><strong>作业说明：</strong>被指派群组收到消息提醒后，进入【处置结果验证】界面。在处置对策中填写具体的处理措施和方案，判断本次处置结果为 OK 或 NG 后提交。</div>
     </div>
   </div>
-  <div class="sub-step-header">3.4 第一群组验证处置结果</div>
+  <div class="sub-step-header">4.4 第一群组验证处置结果</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
       <figure class="step-figure">
@@ -386,7 +423,7 @@
       <div class="step-desc"><strong>作业说明：</strong>第一群组收到处置完成通知后，对处置结果进行验证。输入验证耗时和验证说明。若验证结果 OK，则核准处置记录，异常单进入「结案中」状态；若 NG，则打回至被指派群组重新处理。</div>
     </div>
   </div>
-  <div class="sub-step-header">3.5 异常单结案</div>
+  <div class="sub-step-header">4.5 异常单结案</div>
   <div class="step-pair">
     <div class="step-pair-imgs">
       <figure class="step-figure">

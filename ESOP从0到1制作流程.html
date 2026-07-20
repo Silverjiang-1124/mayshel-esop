@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESOP 从 0 到 1 制作流程</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Microsoft YaHei", "PingFang SC", sans-serif;
+    background: #f0f4f8; color: #1a202c;
+  }
+
+  /* ===== Header ===== */
+  .header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0d47a1 100%);
+    color: #fff; padding: 50px 20px 40px; text-align: center;
+  }
+  .header h1 { font-size: 32px; font-weight: 800; letter-spacing: 1px; }
+  .header .sub { font-size: 15px; color: #94a3b8; margin-top: 8px; }
+  .header .info { font-size: 13px; color: #64748b; margin-top: 12px; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+  /* ===== 快速导航 ===== */
+  .nav-bar {
+    display: flex; gap: 8px; margin: -24px auto 32px; max-width: 900px; padding: 0 20px;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .nav-bar a {
+    background: #fff; padding: 10px 20px; border-radius: 10px; text-decoration: none;
+    font-size: 14px; font-weight: 600; color: #1a73e8; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: 0.2s;
+  }
+  .nav-bar a:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+
+  /* ===== 阶段标题 ===== */
+  .phase-title {
+    font-size: 24px; font-weight: 700; margin: 40px 0 8px;
+    padding-left: 16px; border-left: 5px solid #1a73e8; color: #0f172a;
+  }
+  .phase-desc { font-size: 14px; color: #64748b; margin-bottom: 20px; line-height: 1.6; }
+
+  /* ===== 步骤卡片 ===== */
+  .step { margin-bottom: 14px; }
+  .step-box {
+    background: #fff; border-radius: 12px; padding: 18px 22px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    border-left: 4px solid #1a73e8;
+  }
+  .step-box .top { display: flex; align-items: flex-start; gap: 12px; }
+  .step-box .num {
+    width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; font-size: 15px;
+    margin-top: 2px;
+  }
+  .step-box .body { flex: 1; }
+  .step-box .body .title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .step-box .body .desc { font-size: 14px; color: #475569; line-height: 1.7; }
+  .step-box .body .desc strong { color: #0f172a; }
+  .step-box .body .desc .tag {
+    display: inline-block; background: #e8f0fe; color: #1a73e8;
+    padding: 1px 10px; border-radius: 5px; font-size: 13px; font-weight: 600;
+  }
+
+  .arrow { text-align: center; color: #94a3b8; font-size: 18px; padding: 4px 0; }
+
+  /* ===== 注意点 ===== */
+  .tip {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-radius: 10px; padding: 16px 20px; margin-bottom: 14px;
+    border-left: 4px solid #f59e0b;
+  }
+  .tip .tt { font-weight: 700; font-size: 15px; color: #92400e; margin-bottom: 4px; }
+  .tip .dd { font-size: 14px; color: #78350f; line-height: 1.6; }
+
+  .tip-blue {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border-radius: 10px; padding: 16px 20px; margin-bottom: 14px;
+    border-left: 4px solid #3b82f6;
+  }
+  .tip-blue .tt { font-weight: 700; font-size: 15px; color: #1e40af; margin-bottom: 4px; }
+  .tip-blue .dd { font-size: 14px; color: #1e3a5f; line-height: 1.6; }
+
+  .tip-green {
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+    border-radius: 10px; padding: 16px 20px; margin-bottom: 14px;
+    border-left: 4px solid #10b981;
+  }
+  .tip-green .tt { font-weight: 700; font-size: 15px; color: #065f46; margin-bottom: 4px; }
+  .tip-green .dd { font-size: 14px; color: #064e3b; line-height: 1.6; }
+
+  /* ===== 总结 ===== */
+  .summary-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px; margin: 16px 0;
+  }
+  .summary-card {
+    background: #fff; border-radius: 12px; padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-top: 4px solid #1a73e8; text-align: center;
+  }
+  .summary-card .icon { font-size: 32px; }
+  .summary-card h4 { font-size: 15px; margin: 8px 0 4px; }
+  .summary-card p { font-size: 13px; color: #64748b; line-height: 1.5; }
+
+  footer {
+    text-align: center; padding: 40px 20px; color: #94a3b8; font-size: 13px;
+  }
+
+  @media (max-width: 640px) {
+    .header h1 { font-size: 24px; }
+    .step-box .top { flex-direction: column; }
+    .phase-title { font-size: 20px; }
+  }
+
+  /* Phase tag colors */
+  .num-prep { background: #7c3aed; }
+  .num-do { background: #1a73e8; }
+  .num-publish { background: #059669; }
+  .num-warn { background: #d97706; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📘 ESOP 从 0 到 1 制作流程</h1>
+  <p class="sub">一份操作手册是怎么做出来的 — 实施顾问/培训用</p>
+  <p class="info">美诗儿（浙江）环境智能电器有限公司 · MES 项目</p>
+</div>
+
+<div class="nav-bar">
+  <a href="#prepare">① 准备阶段</a>
+  <a href="#do">② 制作阶段</a>
+  <a href="#publish">③ 发布阶段</a>
+  <a href="#warn">⚠️ 注意事项</a>
+</div>
+
+<div class="container">
+
+  <!-- ==================== 引言 ==================== -->
+  <div class="tip-green">
+    <div class="tt">📌 核心原则</div>
+    <div class="dd">
+      若有<strong>客制需求</strong>，以客制需求为准；没有客制需求的，以标准功能为主。
+    </div>
+  </div>
+
+  <!-- ==================== 阶段一：准备 ==================== -->
+  <div class="phase-title" id="prepare">① 准备阶段 — 先做什么</div>
+  <div class="phase-desc">
+    动手制作之前，先把这些准备工作做好，后面才会顺利。
+  </div>
+
+  <div class="step">
+    <div class="step-box">
+      <div class="top">
+        <div class="num num-prep">1</div>
+        <div class="body">
+          <div class="title">跟客户确认：做哪些模块？</div>
+          <div class="desc">
+            和客户开会，确定需要制作操作手册的<strong>车间/部门范围</strong>。<br>
+            以美诗儿为例，最终确定 5 大模块：<span class="tag">注塑车间</span> <span class="tag">组装车间</span> <span class="tag">设备维保</span> <span class="tag">模具维保</span> <span class="tag">质量检验</span><br>
+            <span style="color:#94a3b8;font-size:13px;">💡 先做核心模块，后续可以再补充，不要一次贪多。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step">
+    <div class="step-box">
+      <div class="top">
+        <div class="num num-prep">2</div>
+        <div class="body">
+          <div class="title">收集材料</div>
+          <div class="desc">
+            向客户收集以下材料：<br>
+            📄 <strong>操作说明书</strong> — Word 文档、PDF 简报（鼎捷标准功能说明书）<br>
+            🖼️ <strong>系统截图</strong> — 操作界面的实际截图<br>
+            📊 <strong>流程文件</strong> — 流程图、操作流程说明<br>
+            <span style="color:#94a3b8;font-size:13px;">💡 材料越全，制作越省事。特别是截图，少了后面要补很麻烦。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step">
+    <div class="step-box">
+      <div class="top">
+        <div class="num num-prep">3</div>
+        <div class="body">
+          <div class="title">确认参照标准</div>
+          <div class="desc">
+            <strong>判断标准：</strong><br>
+            ✅ 如果客户有<strong>客制需求</strong>（定制开发的功能）→ 以客制需求确认书的内容为准<br>
+            ✅ 如果客户用的是<strong>标准功能</strong> → 以鼎捷标准操作说明书（PL 文档）为准<br>
+            ⚠️ 两者混合时，客制优先，标准功能做补充
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step">
+    <div class="step-box">
+      <div class="top">
+        <div class="num num-prep">4</div>
+        <div class="body">
+          <div class="title">准备工具</div>
+          <div class="desc">
+            让开发人员帮忙搭建好环境：<br>
+            🛠️ <strong>Python</strong> — 运行生成器脚本<br>
+            🛠️ <strong>VSCode</strong> — 编辑内容<br>
+            🛠️ <strong>Git</strong> — 版本管理<br>
+            🛠️ <strong>GitHub 账号</strong> — 代码托管<br>
+            🛠️ <strong>Cloudflare 账号</strong> — 部署上线
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== 阶段二：制作 ==================== -->
+  <div class="phase-title" id="do">② 制作阶段 — 怎么做</div>
+  <div class="phase-desc">
+    这是核心阶段，把准备好的材料变成操作手册。
+  </div>
+
+  <div class="step">
+    <div class="step-box">
+      <div class="top">
+        <div class="num num-do">5</div>
+        <div class="body">
+          <div class="title">梳理操作流程</div>
+          <div class="desc">
+            把每个模块的操作流程拆解成标准结构：<br>
+            📌 <strong>场景说明</strong> — 这个模块是干什么的<br>
+            📌 <strong>流程图</strong> — 操作顺序一目了然<br>
+            📌 <strong>操作步骤</strong> — 按 1.1 → 1.2 → 1.3 一步步写清楚<br>
+            📌 <strong>注意事项</strong> — 容易出错的地方单独列出来<br>
+            <span style="color:#94a3b8;font-size:13px;">💡 步骤顺序要按现场操作人员的操作顺序来写，不是按系统菜单顺序。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step">
+    <div class="step-box">
+      <div class="top">
+        <div class="num num-do">6</div>
+        <div class="body">
+          <div class="title">整理截图图片</div>
+          <div class="desc">
+            <strong>从 PDF/Word 中提取截图：</strong><br>
+            ① 从参考文档中提取操作界面的截图<br>
+            ② 按步骤顺序统一编号：<code>fig-01.png</code>、<code>fig-02.png</code>...<br>
+            ③ 放入对应模块的 <code>images/</code> 文件夹<br><br>
+            <strong>关键：图片必须对上操作步骤的文字描述。</strong><br>
+            比如步骤写的是"进入工作平台"，配图就应该是工作平台的界面截图。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step">
+    <div class="step-box">
+      <div class="top">
+        <div class="num num-do">7</div>
+        <div class="body">
+          <div class="title">编写步骤描述</div>
+          <div class="desc">
+            用通俗易懂的语言写操作说明：<br>
+            ✅ <strong>作业说明</strong> — 这一步要做什么、怎么操作<br>
+            ✅ <strong>备注</strong> — 有什么要注意的、什么情况下会触发什么<br>
+            ✅ <strong>配图</strong> — 每步对应的截图<br><br>
+            <span style="color:#94a3b8;font-size:13px;">💡 写完后读一遍，想象自己是操作工，能不能看懂。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step">
+    <div class="step-box">
+      <div class="top">
+        <div class="num num-do">8</div>
+        <div class="body">
+          <div class="title">生成 HTML 页面</div>
+          <div class="desc">
+            内容写好后，运行一行命令：<br>
+            <code style="display:inline-block;background:#1e293b;color:#e2e8f0;padding:4px 12px;border-radius:6px;margin:6px 0;">python generate.py</code><br>
+            脚本会自动：<br>
+            ✅ 生成每个模块的 HTML 页面<br>
+            ✅ 自动绘制流程图（横向，步骤→子步骤）<br>
+            ✅ 生成首页（卡片导航）<br>
+            ✅ 所有页面自动串联侧边栏导航
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step">
+    <div class="step-box">
+      <div class="top">
+        <div class="num num-do">9</div>
+        <div class="body">
+          <div class="title">检查效果</div>
+          <div class="desc">
+            打开浏览器预览生成的页面，逐一核对：<br>
+            ✅ 图片加载是否正确<br>
+            ✅ 图片和文字描述是否对应<br>
+            ✅ 流程图步骤顺序、箭头方向是否正确<br>
+            ✅ 侧边栏导航是否完整<br>
+            ✅ 内容有没有错别字
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step">
+    <div class="step-box">
+      <div class="top">
+        <div class="num num-do">10</div>
+        <div class="body">
+          <div class="title">给客户确认</div>
+          <div class="desc">
+            本地确认没问题后，发给客户预览：<br>
+            ① 启动本地服务器：<code>python -m http.server 8000</code><br>
+            ② 客户通过局域网访问：<code>http://你的IP:8000</code><br>
+            ③ 客户提出修改意见 → 调整内容 → 重新生成 → 再次确认<br><br>
+            <span style="color:#94a3b8;font-size:13px;">💡 预留 2~3 轮修改，客户通常会调整一些细节。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== 阶段三：发布 ==================== -->
+  <div class="phase-title" id="publish">③ 发布阶段 — 让客户看到</div>
+  <div class="phase-desc">
+    确认无误后，部署到线上，客户通过网址就能直接访问。
+  </div>
+
+  <div class="step">
+    <div class="step-box">
+      <div class="top">
+        <div class="num num-publish">11</div>
+        <div class="body">
+          <div class="title">提交到 Git 版本管理</div>
+          <div class="desc">
+            <code style="display:inline-block;background:#1e293b;color:#e2e8f0;padding:4px 12px;border-radius:6px;margin:4px 0;">
+git add -A<br>
+git commit -m "版本说明，比如：新增质量模块检验单指派"<br>
+git push
+            </code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step">
+    <div class="step-box">
+      <div class="top">
+        <div class="num num-publish">12</div>
+        <div class="body">
+          <div class="title">部署到 Cloudflare Pages</div>
+          <div class="desc">
+            发布到互联网，客户通过网址就能访问：<br>
+            🌐 <strong>自动部署</strong> — 推送到 GitHub 后，Cloudflare 自动部署<br>
+            🌐 <strong>获得网址</strong> — 如 <code>mayshel-esop.pages.dev</code><br>
+            🌐 <strong>全球加速</strong> — 客户在任何地方打开都很快<br>
+            🌐 <strong>手机/电脑/平板</strong> — 都能正常查看
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <div class="step">
+    <div class="step-box">
+      <div class="top">
+        <div class="num num-publish">13</div>
+        <div class="body">
+          <div class="title">后续更新</div>
+          <div class="desc">
+            操作手册不是一次做完就完了，后续随时可以更新：<br>
+            🔄 客户需求变了 → 修改内容<br>
+            🔄 运行 <code>python generate.py</code> → 重新生成<br>
+            🔄 <code>git push</code> → 自动部署 → 客户马上看到最新版
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== 注意事项 ==================== -->
+  <div class="phase-title" id="warn">⚠️ 注意事项 — 容易踩的坑</div>
+
+  <div class="tip">
+    <div class="tt">⚠️ 1. 图片必须对上文字</div>
+    <div class="dd">
+      <strong>这是最常见也是最重要的返工原因。</strong><br>
+      步骤写的是"进入工作平台"，配图就应该是工作平台界面，不能放别的。<br>
+      客户可能不会逐字读你的文字，但一眼就能看出图片不对。<br>
+      匹配方法：PDF 中某页文字描述什么操作 → 该页的截图就是对应步骤的配图。
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tt">⚠️ 2. 操作步骤要有闭环</div>
+    <div class="dd">
+      每个操作流程要有头有尾，不能只写一半。<br>
+      比如设备维修：<span style="color:#1a73e8;font-weight:600;">加工中 → 故障 → 维修 → 加工中</span><br>
+      又比如模具叫修：<span style="color:#1a73e8;font-weight:600;">异常发现 → 叫修 → 签收 → 维修 → 完工 → 恢复可用</span><br>
+      写完后检查：这个流程是不是完整的？有没有漏掉某个环节？
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tt">⚠️ 3. 用操作工能听懂的话</div>
+    <div class="dd">
+      操作手册是给<span style="font-weight:600;">现场操作人员</span>看的，不是给 IT 人员看的。<br>
+      ❌ "系统根据 QCFROMTYPE 和 INSPTYPE 进行数据校验判断"<br>
+      ✅ "选择检验单类型（PQC首检/巡检），系统自动匹配对应检验员"<br>
+      写完后找不懂系统的人读一遍，卡壳的地方就是需要改的地方。
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tt">⚠️ 4. 不要手动改 HTML</div>
+    <div class="dd">
+      <strong>永远不要直接修改 .html 文件。</strong><br>
+      所有内容写在 <code>generate.py</code> 的字典里，运行脚本自动生成。<br>
+      手动改 HTML 的话，下次重新生成时手动改的内容会丢失。<br>
+      <span style="color:#1a73e8;font-weight:600;">改内容 → 运行脚本 → 重新生成 → 推送部署</span>，保持这个习惯。
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tt">⚠️ 5. 每次修改记版更记录</div>
+    <div class="dd">
+      每次修改了什么内容，写在 <code>CHANGELOG.md</code> 里。<br>
+      好处：客户问"改了啥"可以直接看；出问题可以回退到上一个版本。<br>
+      格式：日期 + 修改内容 + 修改人。
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tt">⚠️ 6. 客制 vs 标准</div>
+    <div class="dd">
+      <strong>牢记原则：</strong><br>
+      ✅ 有客制需求 → 以客制需求确认书为准<br>
+      ✅ 无客制需求 → 以标准功能操作说明书为准<br>
+      ✅ 两者混合 → 客制优先，标准做补充<br>
+      客制需求通常记录在《需求确认书》中，标准功能参考鼎捷 PL 文档。
+    </div>
+  </div>
+
+
+  <!-- ==================== 总结 ==================== -->
+  <div class="phase-title" style="border-left-color:#059669;">✅ 总结：一句话记住</div>
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="icon">📋</div>
+      <h4>先准备</h4>
+      <p>确认范围 → 收集材料 → 明确标准</p>
+    </div>
+    <div class="summary-card">
+      <div class="icon">✏️</div>
+      <h4>再制作</h4>
+      <p>梳理步骤 → 整理图片 → 编写描述 → 生成页面</p>
+    </div>
+    <div class="summary-card">
+      <div class="icon">🔁</div>
+      <h4>再确认</h4>
+      <p>自己检查 → 客户确认 → 修改迭代</p>
+    </div>
+    <div class="summary-card">
+      <div class="icon">🚀</div>
+      <h4>最后发布</h4>
+      <p>Git 提交 → 推送到 GitHub → Cloudflare 部署上线</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>美诗儿（浙江）环境智能电器有限公司 · MES 项目</p>
+    <p style="margin-top:4px;color:#94a3b8;">ESOP 从 0 到 1 制作流程 · v1.0 · 2026 年 7 月</p>
+  </footer>
+</div>
+</body>
+</html>
